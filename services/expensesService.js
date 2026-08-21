@@ -1,9 +1,27 @@
 import Expenses from "../models/Expenses.js";
 
-export const getExpenseses = async (userId) => {
-  const expeneseData = await Expenses.find({ userId }).sort({ dueDate: 1 });
-  return expeneseData;
-}
+const parseDateUTC = (dateString) => {
+  const [day, month, year] = dateString.split("-").map(Number);
+
+  return new Date(Date.UTC(year, month - 1, day));
+};
+
+export const getExpenseses = async (userId, startDate, endDate) => {
+  const start = parseDateUTC(startDate);
+  const end = parseDateUTC(endDate);
+
+  end.setUTCDate(end.getUTCDate() + 1);
+
+  const expenseData = await Expenses.find({
+    userId,
+    dueDate: {
+      $gte: start,
+      $lt: end,
+    },
+  }).sort({ dueDate: 1 });
+
+  return expenseData;
+};
 
 export const createExpensesService = async (userId, expensesData) => {
   const {

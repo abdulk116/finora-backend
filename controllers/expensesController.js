@@ -2,7 +2,8 @@ import { createExpensesService, getExpenseses, updateExpenseStatusService } from
 
 export const getExpensesByUserId = async (req, res) => {
   try {
-    const expenses = await getExpenseses(req.user.id);
+    const { startDate, endDate } = req.query;
+    const expenses = await getExpenseses(req.user.id, startDate, endDate);
     res.status(200).json({ success: true, count: expenses.length, data: expenses });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
