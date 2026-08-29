@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { protect } from '../middleware/authMiddleware.js';
-import { createExpenses, getExpensesByUserId, updateExpenseStatus } from '../controllers/expensesController.js';
+import { createExpenses, deleteExpense, getExpensesByUserId, updateExpense, updateExpenseStatus } from '../controllers/expensesController.js';
 
 const router = express.Router();
 
@@ -13,6 +13,12 @@ router.route('/')
 
 router.route('/status')
   .post(updateExpenseStatus)
+
+router.route('/delete')
+  .post(deleteExpense)
+
+router.route('/update')
+  .post(updateExpense)
 
 
 export default router;

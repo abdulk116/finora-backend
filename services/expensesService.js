@@ -58,3 +58,53 @@ export const updateExpenseStatusService = async (userId, expeneseData) => {
 
   return await updatedData.save();
 }
+
+export const deleteExpenseService = async (userId, expenseId) => {
+  const deletedExpense = await Expenses.findOneAndDelete({
+    _id: expenseId,
+    userId,
+  });
+
+  if (!deletedExpense) {
+    throw new Error("Expense not found");
+  }
+
+  return deletedExpense;
+};
+
+export const updateExpensesService = async (userId, expensesData) => {
+  const {
+    expenseId,
+    dueDate,
+    related,
+    amount,
+    status,
+    paidDate,
+    notes,
+  } = expensesData;
+
+  const updatedExpense = await Expenses.findOneAndUpdate(
+    {
+      _id: expenseId,
+      userId,
+    },
+    {
+      dueDate,
+      related,
+      amount,
+      status,
+      paidDate,
+      notes,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  if (!updatedExpense) {
+    throw new Error("Expense not found");
+  }
+
+  return updatedExpense;
+};
