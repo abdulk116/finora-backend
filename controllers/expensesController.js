@@ -1,4 +1,4 @@
-import { createExpensesService, getExpenseses, updateExpenseStatusService } from "../services/expensesService.js";
+import { createExpensesService, deleteExpenseService, getExpenseses, updateExpensesService, updateExpenseStatusService } from "../services/expensesService.js";
 
 export const getExpensesByUserId = async (req, res) => {
   try {
@@ -22,6 +22,24 @@ export const createExpenses = async (req, res) => {
 export const updateExpenseStatus = async (req, res) => {
   try {
     const expenses = await updateExpenseStatusService(req.user.id, req.body);
+    res.status(200).json({ success: true, data: expenses });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const deleteExpense = async (req, res) => {
+  try {
+    const expenses = await deleteExpenseService(req.user.id, req.body.expenseId);
+    res.status(200).json({ success: true, data: expenses });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updateExpense = async (req, res) => {
+  try {
+    const expenses = await updateExpensesService(req.user.id, req.body);
     res.status(200).json({ success: true, data: expenses });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
